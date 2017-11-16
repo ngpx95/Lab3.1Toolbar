@@ -1,14 +1,17 @@
 package my.edu.tarc.lab31toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         //Linking UI to program
         textViewMessage = (TextView) findViewById(R.id.textViewMessage);
         //TODO get the default font size
-        size = textViewMessage.getTextSize();
+        size = textViewMessage.getTextSize()/getScreenDensity();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,8 +58,44 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }else if(id == R.id.action_increase){
+            //TODO increase font size
+            if(size < max) {
+                size++;
+                textViewMessage.setTextSize(size);
+            }else{
+                //getApplicationContext() = this
+                Toast.makeText(getApplicationContext(), "This is the max size",Toast.LENGTH_SHORT).show();
+            }
+
+        }else if(id == R.id.action_decrease){
+            //TODO decrease font size
+            if(size > min) {
+                size--;
+                textViewMessage.setTextSize(size);
+            }else{
+                //getApplicationContext() = this
+                Toast.makeText(getApplicationContext(), "This is the min size",Toast.LENGTH_SHORT).show();
+            }
+
+        }else if(id == R.id.action_about){
+            //TODO start the About activity
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public float getScreenDensity(){
+        float sizeDensity=0;
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        sizeDensity = metrics.density;
+
+        return sizeDensity;
     }
 }
